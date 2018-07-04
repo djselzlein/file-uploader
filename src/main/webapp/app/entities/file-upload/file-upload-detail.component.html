@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="fileUpload">
+            <h2><span jhiTranslate="fileUploaderApp.fileUpload.detail.title">File Upload</span> {{fileUpload.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fileUploaderApp.fileUpload.title">Title</span></dt>
+                <dd>
+                    <span>{{fileUpload.title}}</span>
+                </dd>
+                <dt><span jhiTranslate="fileUploaderApp.fileUpload.description">Description</span></dt>
+                <dd>
+                    <span>{{fileUpload.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="fileUploaderApp.fileUpload.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{fileUpload.creationDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="fileUploaderApp.fileUpload.path">Path</span></dt>
+                <dd>
+                    <span>{{fileUpload.path}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/file-upload', fileUpload.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

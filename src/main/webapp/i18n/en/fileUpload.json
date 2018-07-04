@@ -1,0 +1,25 @@
+
+{
+    "fileUploaderApp": {
+        "fileUpload" : {
+            "home": {
+                "title": "File Uploads",
+                "createLabel": "Create a new File Upload",
+                "createOrEditLabel": "Create or edit a File Upload"
+            },
+            "created": "A new File Upload is created with identifier {{ param }}",
+            "updated": "A File Upload is updated with identifier {{ param }}",
+            "deleted": "A File Upload is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete File Upload {{ id }}?"
+            },
+            "detail": {
+                "title": "File Upload"
+            },
+            "title": "Title",
+            "description": "Description",
+            "creationDate": "Creation Date",
+            "path": "Path"
+        }
+    }
+}
