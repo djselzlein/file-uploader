@@ -48,6 +48,14 @@ export class FileUploadService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
+    postFile(fileToUpload: File): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('file', fileToUpload, fileToUpload.name);
+        return this.http
+            .post(this.resourceUrl + '/upload', formData, { observe: 'response' })
+            .map((res: EntityResponseType) => this.convertDateFromServer(res));
+    }
+
     private convertDateFromClient(fileUpload: IFileUpload): IFileUpload {
         const copy: IFileUpload = Object.assign({}, fileUpload, {
             creationDate:

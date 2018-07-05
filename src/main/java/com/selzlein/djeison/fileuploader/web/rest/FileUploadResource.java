@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -58,6 +59,13 @@ public class FileUploadResource {
         return ResponseEntity.created(new URI("/api/file-uploads/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/file-uploads/upload")
+    @Timed
+    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) throws URISyntaxException {
+        log.debug("REST request to upload File : {}", file.getName());
+        return ResponseEntity.ok().build();
     }
 
     /**

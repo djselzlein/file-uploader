@@ -9,6 +9,14 @@
                     <input type="text" class="form-control" id="id" name="id"
                         [(ngModel)]="fileUpload.id" readonly />
                 </div>
+
+                <div class="form-group">
+                    <label for="file">Choose File</label>
+                    <input type="file"
+                           id="file"
+                           (change)="handleFileInput($event)">
+                </div>
+
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="fileUploaderApp.fileUpload.title" for="field_title">Title</label>
                     <input type="text" class="form-control" name="title" id="field_title"
