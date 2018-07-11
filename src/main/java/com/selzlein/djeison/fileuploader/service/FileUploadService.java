@@ -102,7 +102,7 @@ public class FileUploadService {
             fileUpload.setPath(path);
             return save(fileUpload);
         } else {
-            throw new BadRequestAlertException("Invalid id", "fileUpload", "idnotfound");
+            throw new BadRequestAlertException("Invalid id", "fileUpload", "idnull");
         }
     }
 }
