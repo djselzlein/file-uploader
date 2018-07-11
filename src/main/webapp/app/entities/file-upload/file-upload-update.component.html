@@ -1,17 +1,11 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-file-upload-heading" jhiTranslate="fileUploaderApp.fileUpload.home.createOrEditLabel">Create or edit a File Upload</h2>
+            <h2 id="jhi-file-upload-heading" jhiTranslate="fileUploaderApp.fileUpload.home.createOrEditLabel">Create a File Upload</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!fileUpload.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="fileUpload.id" readonly />
-                </div>
-
+                <br/>
                 <div class="form-group">
-                    <label for="file">Choose File</label>
                     <input type="file" id="file" required (change)="handleFileInput($event)">
                 </div>
 

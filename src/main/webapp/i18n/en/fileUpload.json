@@ -5,7 +5,7 @@
             "home": {
                 "title": "File Uploads",
                 "createLabel": "Create a new File Upload",
-                "createOrEditLabel": "Create or edit a File Upload"
+                "createOrEditLabel": "Create a File Upload"
             },
             "created": "A new File Upload is created with identifier {{ param }}",
             "updated": "A File Upload is updated with identifier {{ param }}",
