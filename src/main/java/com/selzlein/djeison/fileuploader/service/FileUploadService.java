@@ -2,15 +2,22 @@ package com.selzlein.djeison.fileuploader.service;
 
 import com.selzlein.djeison.fileuploader.domain.FileUpload;
 import com.selzlein.djeison.fileuploader.repository.FileUploadRepository;
+import com.selzlein.djeison.fileuploader.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 /**
  * Service Implementation for managing FileUpload.
@@ -21,11 +28,10 @@ public class FileUploadService {
 
     private final Logger log = LoggerFactory.getLogger(FileUploadService.class);
 
-    private final FileUploadRepository fileUploadRepository;
-
-    public FileUploadService(FileUploadRepository fileUploadRepository) {
-        this.fileUploadRepository = fileUploadRepository;
-    }
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * Save a fileUpload.
@@ -70,5 +76,33 @@ public class FileUploadService {
     public void delete(Long id) {
         log.debug("Request to delete FileUpload : {}", id);
         fileUploadRepository.deleteById(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public FileUpload upload(Long id, MultipartFile file) throws IOException {
+        String uploadDir = "/files/";
+        String fullPathToUpload = request.getServletContext().getRealPath(uploadDir);
+        if (!new File(fullPathToUpload).exists()) {
+            new File(fullPathToUpload).mkdir();
+        }
+
+        File uploaded = new File(fullPathToUpload + File.separator + file.getOriginalFilename());
+        if (uploaded.exists()) {
+            uploaded.delete();
+        }
+        file.transferTo(uploaded);
+
+        return updateFilePath(id, uploaded.getAbsolutePath());
+    }
+
+    private FileUpload updateFilePath(Long id, String path) {
+        Optional<FileUpload> fileUploadOptional = findOne(id);
+        if (fileUploadOptional.isPresent()) {
+            FileUpload fileUpload = fileUploadOptional.get();
+            fileUpload.setPath(path);
+            return save(fileUpload);
+        } else {
+            throw new BadRequestAlertException("Invalid id", "fileUpload", "idnotfound");
+        }
     }
 }

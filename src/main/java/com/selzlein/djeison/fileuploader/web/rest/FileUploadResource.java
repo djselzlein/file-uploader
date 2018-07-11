@@ -1,6 +1,7 @@
 package com.selzlein.djeison.fileuploader.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.io.Files;
 import com.selzlein.djeison.fileuploader.domain.FileUpload;
 import com.selzlein.djeison.fileuploader.service.FileUploadService;
 import com.selzlein.djeison.fileuploader.web.rest.errors.BadRequestAlertException;
@@ -9,6 +10,7 @@ import com.selzlein.djeison.fileuploader.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +18,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.nio.fs.DefaultFileSystemProvider;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.nio.file.FileSystem;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,11 +42,8 @@ public class FileUploadResource {
 
     private static final String ENTITY_NAME = "fileUpload";
 
-    private final FileUploadService fileUploadService;
-
-    public FileUploadResource(FileUploadService fileUploadService) {
-        this.fileUploadService = fileUploadService;
-    }
+    @Autowired
+    private FileUploadService fileUploadService;
 
     /**
      * POST  /file-uploads : Create a new fileUpload.
@@ -61,11 +65,17 @@ public class FileUploadResource {
             .body(result);
     }
 
-    @PostMapping("/file-uploads/upload")
+    @PostMapping("/file-uploads/{id}/upload")
     @Timed
-    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) throws URISyntaxException {
-        log.debug("REST request to upload File : {}", file.getName());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<FileUpload> upload(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws URISyntaxException, IOException {
+        log.debug("REST request to upload File to FileUpload: {}", id);
+        if (id == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        FileUpload result = fileUploadService.upload(id, file);
+        return ResponseEntity.created(new URI("/api/file-uploads/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**

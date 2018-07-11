@@ -57,10 +57,13 @@ public class FileUploadResourceIntTest {
     @Autowired
     private FileUploadRepository fileUploadRepository;
 
-    
+
 
     @Autowired
     private FileUploadService fileUploadService;
+
+    @Autowired
+    private FileUploadResource fileUploadResource;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -81,7 +84,6 @@ public class FileUploadResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final FileUploadResource fileUploadResource = new FileUploadResource(fileUploadService);
         this.restFileUploadMockMvc = MockMvcBuilders.standaloneSetup(fileUploadResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -183,7 +185,7 @@ public class FileUploadResourceIntTest {
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].path").value(hasItem(DEFAULT_PATH.toString())));
     }
-    
+
 
     @Test
     @Transactional

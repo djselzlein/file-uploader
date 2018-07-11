@@ -34,13 +34,6 @@ export class FileUploadUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        // if (this.fileUpload.id !== undefined) {
-        //     this.subscribeToSaveResponse(this.fileUploadService.update(this.fileUpload));
-        // } else {
-        //     this.subscribeToSaveResponse(this.fileUploadService.create(this.fileUpload));
-        // }
-        this.fileUploadService.postFile(this.fileToUpload);
-
         this.subscribeToSaveResponse(this.fileUploadService.create(this.fileUpload));
     }
 
@@ -51,10 +44,21 @@ export class FileUploadUpdateComponent implements OnInit {
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IFileUpload>>) {
-        result.subscribe((res: HttpResponse<IFileUpload>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError(null));
+        result.subscribe(
+            (res: HttpResponse<IFileUpload>) =>
+                this.subscribeToPostFileResponse(this.fileUploadService.postFile(res.body.id, this.fileToUpload)),
+            (res: HttpErrorResponse) =>
+                this.onSaveError(null));
     }
 
-    private onSaveSuccess() {
+    private subscribeToPostFileResponse(result: Observable<HttpResponse<IFileUpload>>) {
+        result.subscribe(
+            (res: HttpResponse<IFileUpload>) => this.onSaveSuccess(res),
+            (res: HttpErrorResponse) => this.onSaveError(null)
+        );
+    }
+
+    private onSaveSuccess(res) {
         this.isSaving = false;
         this.previousState();
     }
