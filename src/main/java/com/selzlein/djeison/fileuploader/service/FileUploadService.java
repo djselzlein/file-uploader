@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 /**
@@ -80,17 +81,15 @@ public class FileUploadService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public FileUpload upload(Long id, MultipartFile file) throws IOException {
-        String uploadDir = "/files/";
-        String fullPathToUpload = request.getServletContext().getRealPath(uploadDir);
-        if (!new File(fullPathToUpload).exists()) {
-            new File(fullPathToUpload).mkdir();
-        }
-
-        File uploaded = new File(fullPathToUpload + File.separator + file.getOriginalFilename());
+        File uploaded = new File(file.getOriginalFilename());
         if (uploaded.exists()) {
             uploaded.delete();
         }
-        file.transferTo(uploaded);
+        uploaded.createNewFile();
+
+        FileOutputStream fileOutputStream = new FileOutputStream(uploaded);
+        fileOutputStream.write(file.getBytes());
+        fileOutputStream.close();
 
         return updateFilePath(id, uploaded.getAbsolutePath());
     }
