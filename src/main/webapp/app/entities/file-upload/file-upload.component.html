@@ -38,12 +38,6 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/file-upload', fileUpload.id, 'edit']"
-                                class="btn btn-primary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'file-upload/'+ fileUpload.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"

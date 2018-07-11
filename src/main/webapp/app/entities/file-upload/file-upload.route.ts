@@ -62,18 +62,6 @@ export const fileUploadRoute: Routes = [
             pageTitle: 'fileUploaderApp.fileUpload.home.title'
         },
         canActivate: [UserRouteAccessService]
-    },
-    {
-        path: 'file-upload/:id/edit',
-        component: FileUploadUpdateComponent,
-        resolve: {
-            fileUpload: FileUploadResolve
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'fileUploaderApp.fileUpload.home.title'
-        },
-        canActivate: [UserRouteAccessService]
     }
 ];
 
