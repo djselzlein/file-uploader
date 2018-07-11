@@ -56,8 +56,8 @@ export class FileUploadUpdateComponent implements OnInit {
         );
     }
 
-    private subscribeToPostFileResponse(result: Observable<HttpResponse<IFileUpload>>) {
-        result.subscribe((res: HttpResponse<IFileUpload>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError(null));
+    private subscribeToPostFileResponse(result: Observable<any>) {
+        result.subscribe((res: any) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError(null));
     }
 
     private onSaveSuccess() {

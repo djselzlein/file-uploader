@@ -61,15 +61,13 @@ public class FileUploadResource {
 
     @PostMapping("/file-uploads/{id}/upload")
     @Timed
-    public ResponseEntity<FileUpload> upload(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws URISyntaxException, IOException {
+    public ResponseEntity<Void> upload(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         log.debug("REST request to upload File to FileUpload: {}", id);
         if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        FileUpload result = fileUploadService.upload(id, file);
-        return ResponseEntity.created(new URI("/api/file-uploads/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        fileUploadService.upload(id, file);
+        return ResponseEntity.ok().build();
     }
 
     /**
