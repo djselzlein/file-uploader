@@ -45,20 +45,22 @@ export class FileUploadUpdateComponent implements OnInit {
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IFileUpload>>) {
         result.subscribe(
-            (res: HttpResponse<IFileUpload>) =>
-                this.subscribeToPostFileResponse(this.fileUploadService.postFile(res.body.id, this.fileToUpload)),
-            (res: HttpErrorResponse) =>
-                this.onSaveError(null));
-    }
-
-    private subscribeToPostFileResponse(result: Observable<HttpResponse<IFileUpload>>) {
-        result.subscribe(
-            (res: HttpResponse<IFileUpload>) => this.onSaveSuccess(res),
+            (res: HttpResponse<IFileUpload>) => {
+                if (this.fileToUpload) {
+                    this.subscribeToPostFileResponse(this.fileUploadService.postFile(res.body.id, this.fileToUpload));
+                } else {
+                    this.onSaveSuccess();
+                }
+            },
             (res: HttpErrorResponse) => this.onSaveError(null)
         );
     }
 
-    private onSaveSuccess(res) {
+    private subscribeToPostFileResponse(result: Observable<HttpResponse<IFileUpload>>) {
+        result.subscribe((res: HttpResponse<IFileUpload>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError(null));
+    }
+
+    private onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
