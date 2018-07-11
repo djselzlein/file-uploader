@@ -1,7 +1,6 @@
 package com.selzlein.djeison.fileuploader.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.io.Files;
 import com.selzlein.djeison.fileuploader.domain.FileUpload;
 import com.selzlein.djeison.fileuploader.service.FileUploadService;
 import com.selzlein.djeison.fileuploader.web.rest.errors.BadRequestAlertException;
@@ -18,16 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.nio.fs.DefaultFileSystemProvider;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.nio.file.FileSystem;
 import java.util.List;
 import java.util.Optional;
 
